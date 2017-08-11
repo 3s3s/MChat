@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!--link rel="icon" href="../../favicon.ico"-->
+
+    <title>Marycoin Chat</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <!-- Custom styles for this template -->
+    <link href="css/index.css" rel="stylesheet">
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script src="js/index.js"></script>
+    
+  </head>
+  <body>
+    <div class="starter-template">
+        <h1>Marycoin Chat</h1>
+        <p class="lead">The best anonymouse and uncensored chat in the world!</p>
+    </div>
+
+    <div class='container'>
+        <div class='row'>
+            <div class='col-xs-1'>
+
+            </div>
+            <div class='col-xs-10'>
+              <form id='formRegister' class="form-horizontal" role="form">
+                <div class="form-group row">
+                  <div class="col-xs-10"> 
+                    <input type="text" class="form-control" id="privKey" placeholder="Insert (or generate new) Marycoin private key here">
+                  </div>
+                  <div class="col-xs-2">
+                    <button id='buttonGen' class="btn btn-primary">Generate</button>
+                  </div> 
+                </div>
+                <div class="form-group row">
+                  <div class="col-xs-12"> 
+                    <button id='buttonChat' class="btn btn-primary">Join chat!</button>
+                  </div>
+                </div>
+              </form>
+              <div id='chat_main' class='hidden'>
+                <br><hr>
+                <form id='formChat' class="form-horizontal" role="form">
+                  <div class="form-group row">
+                    <div class="col-xs-2">Your address:</div>
+                    <div class="col-xs-8">
+                      <span class="form-control" id="pubKey"></span>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <div class="col-xs-2">Your balance:</div>
+                    <div class="col-xs-4">
+                      <span class="form-control" id="balance">0.0 MC</span>
+                    </div>
+                    <div class="col-xs-2">
+                      <a class="btn btn-primary" target="_blank" href="https://coinsmarkets.com/trade-BTC-MC.htm">Exchange</a>
+                    </div>
+                    <div class="col-xs-2">
+                      <a class="btn btn-primary" target="_blank" href="https://mc-ex.multicoins.org/faucet.html">Faucet</a>
+                    </div>
+                  </div>
+                  <div class='form-group'>
+                    <label for="messsageNew" class="control-label">Your message</label>
+                    <textarea id='messsageNew' class="form-control" name="message" rows="5"></textarea>
+                    <button id='buttonNewMessage' type='submit' class="btn btn-primary">Send</button>
+                  </div>
+                </form>
+              </div>
+              <br><hr>
+            </div>
+            <div class='col-xs-1'></div>
+        </div>
+        <div id='chatArea' class='row hidden'>
+          <div class='col-xs-1'></div>
+          <div class='col-xs-10'>
+            <table id='tableChat' class="table table-striped">
+              <thead>
+                <th>Time</th>
+                <th>User</th>
+                <th>Message</th>
+              </thead>
+              <tbody id='bodyChat'></tbody>
+            </table>
+          </div>
+          <div class='col-xs-1'></div>
+        </div>
+    </div>
+  </body>
+</html>
