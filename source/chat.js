@@ -157,6 +157,8 @@ function ShowChatTable(aMessages)
             .replace(/\[\/b\]/gi, "</b>")
             .replace(/\[i\]/gi, "<i>")
             .replace(/\[\/i\]/gi, "</i>")
+            .replace(/\[img\]/gi, "<img ")
+            .replace(/\[\/img\]/gi, "/>")
             ;
             
         var tr = $('<tr></tr>')
