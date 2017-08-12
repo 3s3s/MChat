@@ -149,10 +149,12 @@ function ShowChatTable(aMessages)
         if (aMessages[i].t.length == 0)
             continue;
             
+        var message = aMessages[i].t.replace(/</g, "&lt").replace(/>/g, "&gt").replace(/\n/g, "<br>");
+            
         var tr = $('<tr></tr>')
             .append($('<td>'+(new Date(aMessages[i].s)).toLocaleString()+'</td>'))
             .append($('<td>'+aMessages[i].from+'</td>'))
-            .append($('<td>'+aMessages[i].t+'</td>'));
+            .append($('<td>'+message+'</td>'));
         $('#tableChat').append(tr);
     }
     

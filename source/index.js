@@ -244,6 +244,7 @@ function SendTransaction(transaction)
     utils.setItem(address+'_lastTX', {id : data.data, amount : amount});
       
     alerts.Alert("Success!", 'Transaction sended. ID='+data.data);
+    $('#messsageNew').val('');
   });
   
 }
