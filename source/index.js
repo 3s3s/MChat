@@ -8,6 +8,7 @@ const utils = require("./utils");
 const chat = require("./chat");
 const g_constants = require("./constants");
 const zlib = require('zlib');
+const alerts = require("./alerts");
 
 
 const g_network = bitcoin.networks[g_constants.network];
@@ -111,7 +112,7 @@ $(function() {
       $('#chatArea').removeClass('hidden');
     }
     catch(e) {
-      alert(e.message);
+      alerts.Alert("Error", e.message);
     }
     
   })
@@ -140,7 +141,7 @@ function CreateOutputs(txt, callback)
       }
       catch(e)
       {
-        alert(e.message);
+        alerts.Alert("Error", e.message);
       }
       
       callback(ret);
@@ -189,7 +190,7 @@ function CreateTransaction(txt)
       const amount = parseInt(txAmount/0.00000001)-(outs.length*1000 + 2000);
       if (amount <= 0)
       {
-        alert('Insufficient funds');
+        alerts.Alert("Error", 'Insufficient funds');
         return;
       }
         
@@ -210,7 +211,7 @@ function CreateTransaction(txt)
       g_Transaction =  {tx: tx, address : address, amount : utils.MakeFloat(amount*0.00000001)};
     }
     catch(e) {
-      alert(e.message);
+      alerts.Alert("Error", e.message);
       //if (address.length)
       //  utils.setItem(address+'_lastTX', {id : '', amount : 0})
     }
@@ -226,7 +227,7 @@ function SendTransaction(transaction)
   
   if (!amount || amount < 1000*0.00000001)
   {
-    alert('ERROR: bad transaction amount');
+    alerts.Alert("Error", 'Bad transaction amount');
     return;
   }
   
@@ -234,14 +235,14 @@ function SendTransaction(transaction)
     if (!data || !data.status || data.status != 'success')
     {
       const message = 'Push transaction failed';
-      alert((data && data.data) ? message + " " +data.data : message);
+      alerts.Alert("Error", (data && data.data) ? message + " " +data.data : message);
       //utils.setItem(address+'_lastTX', {id : '', amount : 0})
       return;
     }
       
     utils.setItem(address+'_lastTX', {id : data.data, amount : amount});
       
-    alert('Success! Transaction sended. ID='+data.data);
+    alerts.Alert("Success!", 'Transaction sended. ID='+data.data);
   });
   
 }

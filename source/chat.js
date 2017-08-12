@@ -6,6 +6,7 @@ const g_constants = require("./constants");
 const bitcoin = require('multicoinjs-lib');
 const g_network = bitcoin.networks[g_constants.network];
 const zlib = require('zlib');
+const alerts = require("./alerts");
 
 var chatSaved = {};
 
@@ -215,7 +216,7 @@ function GetUnconfirmedTXs(callback)
     }
     catch(e)
     {
-        alert("GetUnconfirmedTXs error: "+e.message);
+        alerts.Alert("Error", "GetUnconfirmedTXs error: "+e.message);
     }
     
 }
@@ -239,7 +240,7 @@ function GetUnspentTXs(callback)
     }
     catch(e)
     {
-        alert("GetUnspentTXs error: "+e.message);
+        alerts.Alert("Error", "GetUnspentTXs error: "+e.message);
     }
     
 }
