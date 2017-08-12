@@ -188,13 +188,13 @@ function CreateTransaction(txt)
         txAmount = unspentData.unspent[0].amount;
       }
       
-      const amount = parseInt(txAmount/0.00000001)-(outs.length*1000 + 2000);
+      const amount = parseInt(txAmount/0.00000001)-(outs.length*1000 + 2000+(1000*Math.round(160*outs.length/1024)));
       if (amount <= 0)
       {
         alerts.Alert("Error", 'Insufficient funds');
         return;
       }
-      var cost = (outs.length*1000 + 2000);
+      var cost = (outs.length*1000 + 2000+(1000*Math.round(160*outs.length/1024)));
         
   
       tx.addInput(txIn, 0);
