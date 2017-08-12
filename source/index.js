@@ -158,6 +158,7 @@ function CreateTransaction(txt)
 {
   CreateOutputs(txt, (outs) => {
     var address = "";
+    g_Transaction = {tx: "", address : "", amount : 0};
     try
     {
       const wif = $('#privKey').val();
