@@ -194,14 +194,20 @@ function CreateTransaction(txt)
         alerts.Alert("Error", 'Insufficient funds');
         return;
       }
+      var cost = (outs.length*1000 + 2000);
         
   
       tx.addInput(txIn, 0);
       tx.addOutput(address, amount);
       tx.addOutput(g_constants.chatAddress, 1000);
+      
+      cost += 1000;
   
       for (var i=0; i<outs.length; i++)
+      {
         tx.addOutput(outs[i], 1000);
+        cost += 1000;
+      }
   
       tx.sign(0, keyPair);
       
@@ -210,6 +216,7 @@ function CreateTransaction(txt)
       //utils.setItem(address+'_lastTX', {id : tx.getId(), amount : utils.MakeFloat(amount)});
       //SendTransaction(tx, address, utils.MakeFloat(amount*0.00000001));
       g_Transaction =  {tx: tx, address : address, amount : utils.MakeFloat(amount*0.00000001)};
+      $('#txInfo').html('Transaction will cost: '+(cost*0.00000001).toFixed(8)+' MC')
     }
     catch(e) {
       alerts.Alert("Error", e.message);
