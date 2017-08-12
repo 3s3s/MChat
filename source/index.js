@@ -180,7 +180,7 @@ function CreateTransaction(txt)
           
         if (!unspentData.unspent || !unspentData.unspent.length)
         {
-          $('#balance').addClass('form-control-danger')
+          $('#balance').addClass('alert-danger')
           return;
         }
           
