@@ -1,6 +1,6 @@
 'use strict';
 
-//browserify --debug ~/workspace/source/index.js > ~/workspace/js/index.js
+//browserify --debug ./source/index.js > ./js/index.js
 
 const $ = require('jquery');
 const bitcoin = require('multicoinjs-lib');
@@ -175,6 +175,12 @@ function CreateTransaction(txt)
         var unspentData = utils.getUnspent(address);
         if (!unspentData || !unspentData.address)
           return;
+          
+        if (!unspentData.data.length)
+        {
+          $('#balance').addClass('form-control-danger')
+          return;
+        }
           
         txIn = unspentData.unspent[0].tx;
         txAmount = unspentData.unspent[0].amount;
