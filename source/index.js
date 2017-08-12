@@ -177,7 +177,7 @@ function CreateTransaction(txt)
         if (!unspentData || !unspentData.address)
           return;
           
-        if (!unspentData.unspent || !unspentData.data.length)
+        if (!unspentData.unspent || !unspentData.unspent.length)
         {
           $('#balance').addClass('form-control-danger')
           return;
