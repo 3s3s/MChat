@@ -7,6 +7,7 @@ const bitcoin = require('multicoinjs-lib');
 const g_network = bitcoin.networks[g_constants.network];
 const zlib = require('zlib');
 const alerts = require("./alerts");
+const api = require("./api");
 
 var chatSaved = {};
 
@@ -65,6 +66,10 @@ function SaveTx(aTXs, nIndex)
 
     if (!chatSaved[info.tx])
         chatSaved[info.tx] = {info : info};
+    
+    /*api.GetTransaction(info.tx, (data)=>{
+        
+    });*/
     
     utils.getJSON(g_constants.API+"gettransaction?hash="+info.tx, (code, data)=>{
         if (!data || !data.status || data.status.localeCompare('success') != 0)
@@ -138,7 +143,8 @@ function ShowChatTable(aMessages)
     }
     aMessages.sort((a, b) => {return parseInt(b.s) - parseInt(a.s);});
 
-    $('#bodyChat').html('');    
+    $('#bodyChatEn').html('');    
+    $('#bodyChatRu').html('');    
     
  /*   if (aMessages.length < Object.keys(chatSaved).length)
     {
@@ -166,14 +172,23 @@ function ShowChatTable(aMessages)
             .append($('<td>'+(new Date(aMessages[i].s)).toLocaleString()+'</td>'))
             .append($('<td>'+aMessages[i].from+'</td>'))
             .append($('<td>'+message+'</td>'));
-        $('#tableChat').append(tr);
+            
+        if (!aMessages[i].b || aMessages[i].b == 'ru')
+            $('#bodyChatRu').append(tr);
+        if (aMessages[i].b == 'en')
+            $('#bodyChatEn').append(tr);
     }
     
     function ShowInitMessage()
     {
-        $('#bodyChat').html(''); 
-        var tr = $('<tr></tr>').append($('<td>Loading messages...</td>'));
-        $('#tableChat').append(tr);
+        $('#bodyChatEn').html(''); 
+        $('#bodyChatRu').html(''); 
+        
+        var trEn = $('<tr></tr>').append($('<td>Loading messages...</td>'));
+        var trRu = $('<tr></tr>').append($('<td>Загрузка сообщений...</td>'));
+        
+        $('#bodyChatEn').append(trEn);
+        $('#bodyChatRu').append(trRu);
     }
 }
 

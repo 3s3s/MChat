@@ -113,6 +113,27 @@ exports.getJSON = function(query, callback)
     exports.getHTTP(options, callback);
 };
 
+exports.postJSON = function(query, body, callback)
+{
+    const parsed = url.parse(query, true);
+    const options = {
+        host: parsed.hostname,
+        port: parsed.port || (parsed.protocol=='https:' ? 443 : 80),
+        path: parsed.path,
+        method: 'POST',
+        body: body,
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    };
+    
+    if (parsed.auth)
+        options['auth'] = parsed.auth;
+    exports.getHTTP(options, callback);
+};
+
+
+
 exports.getHTTP = function(options, onResult)
 {
     console.log("rest::getJSON");

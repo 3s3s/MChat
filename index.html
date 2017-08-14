@@ -42,11 +42,11 @@
                     <button id='buttonGen' class="btn btn-primary">Generate</button>
                   </div> 
                 </div>
-                <div class="form-group row">
+                <!--<div class="form-group row">
                   <div class="col-xs-12"> 
                     <button id='buttonChat' class="btn btn-primary">Join chat!</button>
                   </div>
-                </div>
+                </div>-->
               </form>
               <div id='chat_main' class='hidden'>
                 <br><hr>
@@ -87,16 +87,43 @@
             </div>
             <div class='col-xs-1'></div>
         </div>
-        <div id='chatArea' class='row hidden'>
+        <div class='row'>
           <div class='col-xs-1'></div>
           <div class='col-xs-10'>
-            <table id='tableChat' class="table table-striped">
+            <ul id='parentBoards' class="nav nav-pills">
+            </ul>
+          </div>
+          <div class='col-xs-1'></div>
+        </div>
+        <div id='chatArea' class='row'>
+          <div class='col-xs-1'></div>
+          <div class='col-xs-10'>
+            <table id='tableForum' class="table table-striped">
+              <thead>
+                <th>Boards</th>
+              </thead>
+              <tbody id='bodyForum'>
+                <tr><td><a id='board_en' href='en'>English</a></td></tr>
+                <tr><td><a id='board_ru' href='ru'>Русский (Russian)</a></td></tr>
+              </tbody>
+            </table>
+            
+            <table id='tableChatEn' class="hidden table table-striped">
               <thead>
                 <th>Time</th>
                 <th>User</th>
                 <th>Message</th>
               </thead>
-              <tbody id='bodyChat'></tbody>
+              <tbody id='bodyChatEn'></tbody>
+            </table>
+
+            <table id='tableChatRu' class="hidden table table-striped">
+              <thead>
+                <th>Время</th>
+                <th>Пользователь</th>
+                <th>Сообщение</th>
+              </thead>
+              <tbody id='bodyChatRu'></tbody>
             </table>
           </div>
           <div class='col-xs-1'></div>
