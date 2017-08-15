@@ -219,9 +219,18 @@ function DecodeOuts(outs, callback)
           // handle error
           all.ret.data.raw = JSON.stringify({s:0,t:"",v:"1"});
         }
-        const parsed = JSON.parse(ret.data.raw);
-        all.ret.data.s = parsed.s
-        all.ret.data.t = parsed.t;
+        
+        try
+        {
+            const parsed = JSON.parse(ret.data.raw);
+            all.ret.data.s = parsed.s || 0;
+            all.ret.data.t = parsed.t || "";
+            all.ret.data.pb = parsed.pb || ".";
+        }
+        catch(e)
+        {
+            
+        }
         callback(all.ret);
     });  
 }
