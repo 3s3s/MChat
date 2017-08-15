@@ -1,4 +1,5 @@
 'use strict';
+const utils = require("./utils");
 
 exports.Init = function()
 {
@@ -23,6 +24,7 @@ exports.Init = function()
 
     function ShowEnBoard()
     {
+        utils.setItem('parentBoard', "en");
         $('#tableForum').addClass('hidden');
         $('#parentBoards').removeClass('hidden');
         
@@ -34,6 +36,7 @@ exports.Init = function()
     
     function ShowRuBoard()
     {
+        utils.setItem('parentBoard', "ru");
         $('#tableForum').addClass('hidden');
         $('#parentBoards').removeClass('hidden');
         
@@ -46,6 +49,7 @@ exports.Init = function()
 
 function ShowTopParentBoard()
 {
+    utils.setItem('parentBoard', ".");
     $('#parentBoards').addClass('hidden');
     
     $('#tableForum').removeClass('hidden');

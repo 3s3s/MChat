@@ -69,31 +69,6 @@ $(function() {
   //  utils.setItem('wif', wif);
   })
   
- /* $('#buttonChat').on('click', function(event) {
-    event.preventDefault();
-    
-    $('#pubKey').html('');  
-    try {
-      const wif = $('#privKey').val();
-      const keyPair = bitcoin.ECPair.fromWIF( wif, g_network );
-      const address = keyPair.getAddress();
-      
-      utils.setItem('address', address);
-      utils.setItem('wif', wif);
-      
-      $('#pubKey').html(address);
-      utils.UpdateBalance();
-      utils.UpdateUnspent();
-      
-      $('#chat_main').removeClass('hidden');
-      $('#chatArea').removeClass('hidden');
-    }
-    catch(e) {
-      alerts.Alert("Error", e.message);
-    }
-    
-  })*/
-  
 });
 
 function UpdateAddress()
@@ -121,8 +96,12 @@ function UpdateAddress()
 
 function CreateOutputs(txt, callback)
 {
-  var txtJSON = JSON.stringify({s:Date.now(),v:'1',t:txt});
+  var txtJSON = JSON.stringify({s:Date.now(),v:'1',pb:parentBoard,t:txt});
   
+  const parentBoard = utils.getItem('parentBoard');
+  if (parentBoard && parentBoard.status && parentBoard.status == 'success')
+    txtJSON['pb'] = parentBoard.value;
+
   zlib.deflate(txtJSON, (err, buffer) => {
     if (!err) {
       //console.log(buffer.toString('base64'));

@@ -46,7 +46,7 @@ function RemoveOldKeys()
     var tmp = {};
     for(var key in chatSaved)
     {
-        if (chatSaved[key].info.confirmations && chatSaved[key].info.confirmations > 200)
+        if (chatSaved[key].info.confirmations && chatSaved[key].info.confirmations > 2000 && Object.keys(chatSaved).length > 200)
             continue;
         tmp[key] = chatSaved[key]; 
     }
@@ -105,12 +105,13 @@ function UpdateChatTable()
         {
             const outs = JSON.parse(unescape(chatSaved[key]['data'][0].vout));
             
-            const initKey = key;
+            //const initKey = key;
+            const message = chatSaved[key];
             DecodeOuts(outs, (textJSON) => {
                 if (!textJSON || textJSON.result != 'success')
                     return;
                     
-                chatSaved[initKey]['txtData'] = textJSON.data;
+                message['txtData'] = textJSON.data;
             });
             //const textJSON = DecodeOuts(outs);
             
@@ -173,9 +174,9 @@ function ShowChatTable(aMessages)
             .append($('<td>'+aMessages[i].from+'</td>'))
             .append($('<td>'+message+'</td>'));
             
-        if (!aMessages[i].b || aMessages[i].b == 'ru')
+        if (!aMessages[i].pb || aMessages[i].pb == 'ru' || aMessages[i].pb == '.')
             $('#bodyChatRu').append(tr);
-        if (aMessages[i].b == 'en')
+        if (aMessages[i].pb == 'en')
             $('#bodyChatEn').append(tr);
     }
     
