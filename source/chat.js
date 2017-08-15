@@ -147,10 +147,9 @@ function ShowChatTable(aMessages)
     $('#bodyChatEn').html('');    
     $('#bodyChatRu').html('');    
     
- /*   if (aMessages.length < Object.keys(chatSaved).length)
-    {
-        
-    }*/
+    if (aMessages.length < Object.keys(chatSaved).length)
+        ShowInitMessage();
+ 
     for (var i = 0; i < aMessages.length; i++)
     {
         if (aMessages[i].t.length == 0)
