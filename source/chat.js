@@ -16,7 +16,7 @@ exports.Update = function()
     GetUnconfirmedTXs((ret1)=>{
         const unconfirmed = ret1;
         GetUnspentTXs((ret2)=>{
-            //ret2.sort((a,b)=>{return a.confirmations - b.confirmations});
+            ret2.sort((a,b)=>{return a.confirmations - b.confirmations});
             const txs = unconfirmed.concat(ret2);
             
             //utils.ForEachSync(txs, SaveTx, () => {

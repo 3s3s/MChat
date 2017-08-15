@@ -30,9 +30,12 @@ $(function() {
   
   const savedWIF = utils.getItem('wif');
   if (savedWIF && savedWIF.status && savedWIF.status == 'success')
+  {
     $('#privKey').val(savedWIF.value);
+    UpdateAddress();
+  }
 
-  UpdateAddress();
+  //UpdateAddress();
   $('#privKey').on('change textInput input', function(event) {
     UpdateAddress();
   })
@@ -55,9 +58,6 @@ $(function() {
   $('#buttonGen').on('click', function(event) {
     event.preventDefault();
     
-   // $('#chat_main').addClass('hidden');
-  //  $('#chatArea').addClass('hidden');
-    
     const keyPair = bitcoin.ECPair.makeRandom({network : g_network});
    // const address = keyPair.getAddress();
     const wif = keyPair.toWIF();
@@ -65,8 +65,6 @@ $(function() {
     $('#privKey').val(wif);
     UpdateAddress();
     
-   // utils.setItem('address', address);
-  //  utils.setItem('wif', wif);
   })
   
 });
