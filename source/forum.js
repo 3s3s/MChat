@@ -28,6 +28,8 @@ exports.Init = function()
         $('#tableForum').addClass('hidden');
         $('#parentBoards').removeClass('hidden');
         
+        $('#chat_main').removeClass('hidden');
+        
         $('#tableChatEn').removeClass('hidden');
         $('#tableChatRu').addClass('hidden');
             
@@ -39,6 +41,8 @@ exports.Init = function()
         utils.setItem('parentBoard', "ru");
         $('#tableForum').addClass('hidden');
         $('#parentBoards').removeClass('hidden');
+        
+        $('#chat_main').removeClass('hidden');
         
         $('#tableChatEn').addClass('hidden');
         $('#tableChatRu').removeClass('hidden');
@@ -53,7 +57,7 @@ function ShowTopParentBoard()
     $('#parentBoards').addClass('hidden');
     
     $('#tableForum').removeClass('hidden');
-    $('#chat_main').removeClass('hidden');
+    $('#chat_main').addClass('hidden');
     $('#tableChatEn').addClass('hidden');
     $('#tableChatRu').addClass('hidden');
 }
