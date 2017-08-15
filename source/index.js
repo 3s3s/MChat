@@ -96,11 +96,13 @@ function UpdateAddress()
 
 function CreateOutputs(txt, callback)
 {
-  var txtJSON = JSON.stringify({s:Date.now(),v:'1',t:txt});
+  var data = {s:Date.now(),v:'1',t:txt};
   
   const parentBoard = utils.getItem('parentBoard');
   if (parentBoard && parentBoard.status && parentBoard.status == 'success')
-    txtJSON['pb'] = parentBoard.value;
+    data['pb'] = parentBoard.value;
+    
+  var txtJSON = JSON.stringify(data);
 
   zlib.deflate(txtJSON, (err, buffer) => {
     if (!err) {
