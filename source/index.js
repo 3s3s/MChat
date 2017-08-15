@@ -96,7 +96,7 @@ function UpdateAddress()
 
 function CreateOutputs(txt, callback)
 {
-  var txtJSON = JSON.stringify({s:Date.now(),v:'1',pb:parentBoard,t:txt});
+  var txtJSON = JSON.stringify({s:Date.now(),v:'1',t:txt});
   
   const parentBoard = utils.getItem('parentBoard');
   if (parentBoard && parentBoard.status && parentBoard.status == 'success')
