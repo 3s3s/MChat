@@ -1,64 +1,60 @@
 'use strict';
 const utils = require("./utils");
+const ruBoards = require("./childboards/ruboards");
+const enBoards = require("./childboards/enboards");
+const common = require("./childboards/common");
 
 exports.Init = function()
 {
     ShowTopParentBoard();
 
-    const topParentBoard = $('<a id="topParent" href="#">Boards</a>');
-    
-    topParentBoard.on('click', (e) => {
+    common.topParentBoard.on('click', (e) => {
         e.preventDefault();
         ShowTopParentBoard();
     })
     
     $('#board_en').on('click', (e) => {
         e.preventDefault();
-        ShowEnBoard();
+        enBoards.ShowEnBoard();
+    })
+    $('#board_en_1').on('click', (e) => {
+        e.preventDefault();
+        enBoards.ShowEnBoardChild('en_1');
+    })
+    $('#board_en_2').on('click', (e) => {
+        e.preventDefault();
+        enBoards.ShowEnBoardChild('en_2');
+    })
+    $('#board_en_3').on('click', (e) => {
+        e.preventDefault();
+        enBoards.ShowEnBoardChild('en_3');
     })
     
     $('#board_ru').on('click', (e) => {
         e.preventDefault();
-        ShowRuBoard();
+        ruBoards.ShowRuBoard();
     })    
+    $('#board_ru_1').on('click', (e) => {
+        e.preventDefault();
+        ruBoards.ShowRuBoardChild('ru_1');
+    })
+    $('#board_ru_2').on('click', (e) => {
+        e.preventDefault();
+        ruBoards.ShowRuBoardChild('ru_2');
+    })
+    $('#board_ru_3').on('click', (e) => {
+        e.preventDefault();
+        ruBoards.ShowRuBoardChild('ru_3');
+    })
 
-    function ShowEnBoard()
-    {
-        utils.setItem('parentBoard', "en");
-        $('#tableForum').addClass('hidden');
-        $('#parentBoards').removeClass('hidden');
-        
-        $('#chat_main').removeClass('hidden');
-        
-        $('#tableChatEn').removeClass('hidden');
-        $('#tableChatRu').addClass('hidden');
-            
-        $('#parentBoards').append($('<li></li>').append(topParentBoard));
-    }   
-    
-    function ShowRuBoard()
-    {
-        utils.setItem('parentBoard', "ru");
-        $('#tableForum').addClass('hidden');
-        $('#parentBoards').removeClass('hidden');
-        
-        $('#chat_main').removeClass('hidden');
-        
-        $('#tableChatEn').addClass('hidden');
-        $('#tableChatRu').removeClass('hidden');
-
-        $('#parentBoards').append($('<li></li>').append(topParentBoard));
-    }    
 }
 
 function ShowTopParentBoard()
 {
+    common.HideAllTables();
+    
     utils.setItem('parentBoard', ".");
-    $('#parentBoards').addClass('hidden');
     
     $('#tableForum').removeClass('hidden');
-    $('#chat_main').addClass('hidden');
-    $('#tableChatEn').addClass('hidden');
-    $('#tableChatRu').addClass('hidden');
 }
 
