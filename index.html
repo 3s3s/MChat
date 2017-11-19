@@ -69,6 +69,12 @@
                       <a class="btn btn-primary" target="_blank" href="https://mc-ex.multicoins.org/faucet.html">Faucet</a>
                     </div>
                   </div>
+                  
+                  
+                  <div class='form-group'>
+                    <label for="topicNew" class="control-label">Subject:</label>
+                    <input type="text" class="form-control" id="topicNew" >
+                  </div>
                   <div class='form-group'>
                     <label for="messsageNew" class="control-label">Your message</label>
                     <textarea id='messsageNew' class="form-control" name="message" rows="5"></textarea>
@@ -78,6 +84,9 @@
                       </div>
                       <div class="col-xs-6">
                         <span id='txInfo'></span>
+                      </div>
+                      <div class="col-xs-2">
+                        <button id='buttonCancel' type='submit' class="btn btn-primary">Cancel</button>
                       </div>
                     </div>
                   </div>
@@ -90,7 +99,16 @@
         <div class='row'>
           <div class='col-xs-1'></div>
           <div class='col-xs-10'>
-            <ul id='parentBoards' class="nav nav-pills">
+            <ol id='parentBoards' class="breadcrumb">
+            </ol>
+          </div>
+          <div class='col-xs-1'></div>
+        </div>
+        <div class='row'>
+          <div class='col-xs-1'></div>
+          <div class='col-xs-10'>
+            <ul id='clientCommands' class="nav navbar-nav navbar-right">
+              
             </ul>
           </div>
           <div class='col-xs-1'></div>
@@ -100,11 +118,9 @@
           <div class='col-xs-10'>
             <table id='tableForum' class="table table-striped">
               <thead>
-                <th>Boards</th>
+                <th></th>
               </thead>
               <tbody id='bodyForum'>
-                <tr><td><a id='board_en' href='en'>English</a></td></tr>
-                <tr><td><a id='board_ru' href='ru'>Русский (Russian)</a></td></tr>
               </tbody>
             </table>
             
@@ -125,37 +141,71 @@
               </thead>
               <tbody id='bodyChatRu'></tbody>
             </table>
-            
-            <table id='tableEnChildBoards' class="hidden table table-striped">
+<!-- ENGLISH BOARDS START -->            
+            <table id='tableChildBoards_en' class="hidden table table-striped">
               <thead>
                 <th></th>
-                <th></th>
+                <th></th> 
                 <th></th>
               </thead>
               <tbody id='bodyEnChildBoards'>
-                <tr>
-                  <td><a id='board_en_1' href='en_1'>Development & Technical Discussion</a></td><td></td><td></td>
-                  <td><a id='board_en_2' href='en_2'>Politics & Society</a></td><td></td><td></td>
-                  <td><a id='board_en_3' href='en_3'>Off-topic</a></td><td></td><td></td>
-                </tr>
-              </tbody>
-            </table>
-
-            <table id='tableRuChildBoards' class="hidden table table-striped">
-              <thead>
-                <th></th>
-                <th></th>
-                <th></th>
-              </thead>
-              <tbody id='bodyRuChildBoards'>
-                <tr>
-                  <td><a id='board_ru_1' href='ru_1'>Разработка и технические вопросы</a></td><td></td><td></td>
-                  <td><a id='board_ru_2' href='ru_2'>Политика</a></td><td></td><td></td>
-                  <td><a id='board_ru_3' href='ru_3'>Разное</a></td><td></td><td></td>
-                </tr>
               </tbody>
             </table>
             
+            <table id='id_table_en_1' class="hidden table table-striped">
+              <thead>
+              </thead>
+              <tbody id='bodyChildBoard_en_1'>
+              </tbody>
+            </table>
+            <table id='id_table_en_2' class="hidden table table-striped">
+              <thead>
+              </thead>
+              <tbody id='bodyChildBoard_en_2'>
+              </tbody>
+            </table>
+            <table id='id_table_en_3' class="hidden table table-striped">
+              <thead>
+              </thead>
+              <tbody id='bodyChildBoard_en_3'>
+              </tbody>
+            </table>
+<!-- ENGLISH BOARDS END -->   
+
+<!-- RUSSIAN BOARDS START -->   
+            <table id='tableChildBoards_ru' class="hidden table table-striped">
+              <thead>
+              </thead>
+              <tbody id='bodyRuChildBoards'>
+              </tbody>
+            </table>
+
+            <table id='id_table_ru_1' class="hidden table table-striped">
+              <thead>
+              </thead>
+              <tbody id='bodyChildBoard_ru_1'>
+              </tbody>
+            </table>
+            <table id='id_table_ru_2' class="hidden table table-striped">
+              <thead>
+              </thead>
+              <tbody id='bodyChildBoard_ru_2'>
+              </tbody>
+            </table>
+            <table id='id_table_ru_3' class="hidden table table-striped">
+              <thead>
+              </thead>
+              <tbody id='bodyChildBoard_ru_3'>
+              </tbody>
+            </table>
+<!-- RUSSIAN BOARDS END -->      
+
+            <table id='tableMessages' class="table table-bordered">
+              <thead class="messages-table-header">
+              </thead>
+              <tbody id='bodyMessages'>
+              </tbody>
+            </table>
           </div>
           <div class='col-xs-1'></div>
         </div>

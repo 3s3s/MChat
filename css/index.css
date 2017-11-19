@@ -5,3 +5,9 @@ body {
   padding: 20px 15px;
   text-align: center;
 }
+
+.messages-table-header {
+  background-color: #88A6C0;
+  color: #FFF;
+  padding: 20px;
+}
