@@ -8,6 +8,7 @@ const g_network = bitcoin.networks[g_constants.network];
 const zlib = require('zlib');
 const alerts = require("./alerts");
 const api = require("./api");
+const common = require("./childboards/common");
 
 var chatSaved = {};
 
@@ -113,26 +114,13 @@ function UpdateChatTable()
                     
                 message['txtData'] = textJSON.data;
             });
-            //const textJSON = DecodeOuts(outs);
-            
-            //if (!textJSON || textJSON.result != 'success')
-            //    continue;
-            
-            //tmp[key] = chatSaved[key];    
-            //txtArray.push(textJSON.data);
         }
         catch(e)
         {
             continue;
         }
             
-        //var tr = $('<tr id="tr_'+key+'"></tr>').append($('<td id="td_'+key+'">'+key+'</td>'));
-        //$('#tableChat').append(tr);
     }
-    
-    //chatSaved = tmp;
-    
-    //ShowChatTable(txtArray);
 }
 
 function ShowChatTable(aMessages)
@@ -155,29 +143,20 @@ function ShowChatTable(aMessages)
         if (aMessages[i].t.length == 0)
             continue;
             
-        var message = aMessages[i].t
-            .replace(/</g, "&lt")
-            .replace(/>/g, "&gt")
-            .replace(/\n/g, "<br>")
-            .replace(/\[b\]/gi, "<b>")
-            .replace(/\[\/b\]/gi, "</b>")
-            .replace(/\[i\]/gi, "<i>")
-            .replace(/\[\/i\]/gi, "</i>")
-            .replace(/\[img/gi, "<img ")
-            .replace(/\[\/img\]/gi, "</img>")
-            .replace(/\]/g, ">")
-            ;
+        const old = utils.getItem((aMessages[i].pb || '.')+'_messages').status == 'false' ? [] : utils.getItem(aMessages[i].pb+'_messages').value || [];
+        
+        var next = (typeof old === 'object' && !Array.isArray(old)) ? old : {}; //Array.isArray(old) ? old : [];
+
+        if (!next[aMessages[i].s])
+            next[aMessages[i].s] = {};
             
-        var tr = $('<tr></tr>')
-            .append($('<td>'+(new Date(aMessages[i].s)).toLocaleString()+'</td>'))
-            .append($('<td>'+aMessages[i].from+'</td>'))
-            .append($('<td>'+message+'</td>'));
+        next[aMessages[i].s][aMessages[i].from] = aMessages[i];
+
+        utils.setItem(aMessages[i].pb+'_messages', next);
             
-        if (!aMessages[i].pb || aMessages[i].pb == 'ru' || aMessages[i].pb == '.')
-            $('#bodyChatRu').append(tr);
-        if (aMessages[i].pb == 'en')
-            $('#bodyChatEn').append(tr);
     }
+    
+    common.ShowCurrentBranch();
     
     function ShowInitMessage()
     {
@@ -202,7 +181,7 @@ function DecodeOuts(outs, callback)
     ret.data['from'] = outs[0].scriptPubKey.addresses[0];
     
     var allBuffs = {array: [], length: 0};
-    for (var i=2; i<outs.length; i++)
+    for (var i=3; i<outs.length; i++)
     {
         const checkBuff = bitcoin.address.fromBase58Check(outs[i].scriptPubKey.addresses[0]).hash;
         allBuffs.array.push(checkBuff);
@@ -225,6 +204,7 @@ function DecodeOuts(outs, callback)
             all.ret.data.s = parsed.s || 0;
             all.ret.data.t = parsed.t || "";
             all.ret.data.pb = parsed.pb || ".";
+            all.ret.data.subject = parsed.subject || "???";
         }
         catch(e)
         {
@@ -238,7 +218,7 @@ function GetUnconfirmedTXs(callback)
 {
     try
     {
-        const address = g_constants.chatAddress;
+        const address = g_constants.GetTopForumAddress();
         
         utils.getJSON(g_constants.API+"address/unconfirmed/"+address, (code, data)=>{
             if (!data || !data.status || data.status.localeCompare('success') != 0)
@@ -262,7 +242,7 @@ function GetUnspentTXs(callback)
 {
     try
     {
-        const address = g_constants.chatAddress;
+        const address = g_constants.GetTopForumAddress();
         
         utils.getJSON(g_constants.API+"address/unspent/"+address, (code, data)=>{
             if (!data || !data.status || data.status.localeCompare('success') != 0)

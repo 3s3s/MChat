@@ -183,10 +183,10 @@ exports.getHTTP = function(options, onResult)
 
 exports.GetLastTX = function(address)
 {
-    const savedLastTx = exports.getItem(address+'_lastTX');
-    if (savedLastTx && savedLastTx.status && savedLastTx.status == 'success')
-      return savedLastTx.value;
-    else
+   // const savedLastTx = exports.getItem(address+'_lastTX');
+  //  if (savedLastTx && savedLastTx.status && savedLastTx.status == 'success')
+   //   return savedLastTx.value;
+   // else
       return {id : '', amount : 0};
   
 }
@@ -204,12 +204,21 @@ exports.UpdateBalance = function()
             $('#balance').html(data.message);
             return;
         }
-        var amount = "";
+        /*var amount = "";
         const g_lastTX = exports.GetLastTX(savedAddr.value);
         if (g_lastTX && g_lastTX.amount)
-            amount = ' (available '+g_lastTX.amount+')';
+            amount = ' (available '+g_lastTX.amount+')';*/
+            
+        const unspentData = exports.getUnspent(savedAddr.value);
         
-        $('#balance').html(data.data.balance+amount+' MC');
+        var availableBalance = 0.0;
+        if (unspentData && unspentData.unspent)
+        {
+            for (var i=0; i<unspentData.unspent.length; i++)
+                availableBalance += 1.0*unspentData.unspent[i].amount;
+        }
+
+        $('#balance').html(data.data.balance+' (available: '+exports.MakeFloat(availableBalance)+') MC');
     });
 }
 
@@ -224,11 +233,42 @@ exports.UpdateUnspent = function()
             return;
 
         exports.setItem(savedAddr.value+'_unspent', data.data);
+        
+        UpdateUnconfirmed();
     });
+    
+    function UpdateUnconfirmed()
+    {
+        exports.getJSON( g_constants.API+"address/unconfirmed/" + savedAddr.value, (code, data)=>{
+            if (!data || !data.status || data.status.localeCompare('success') != 0)
+                return;
+    
+            exports.setItem(savedAddr.value+'_unconfirmed', data.data);
+            
+        });
+        
+    }
+}
+
+exports.SwapUnconfirmed = function()
+{
+    const savedAddr = exports.getItem('address');
+    if (!savedAddr || !savedAddr.status || savedAddr.status != 'success')
+      return;
+    
+    const data = exports.getItem(savedAddr.value+'_unconfirmed');
+    if (!data || !data.status || data.status != 'success')
+        return;
+        
+    exports.setItem(savedAddr.value+'_unspent', data.value);
 }
 
 exports.getUnspent = function(address)
 {
+   // const unconfirmed = exports.getItem(address+'_unconfirmed');
+   // if (unconfirmed && unconfirmed.status && unconfirmed.status == 'success' && unconfirmed.value.unconfirmed.length)
+   //     return unconfirmed.value;
+        
     return exports.getItem(address+'_unspent').value;
 }
 
@@ -247,6 +287,31 @@ exports.pushTransaction = function(hexTX, callback)
     });
 
 };
+
+exports.GetTopicAddress = function()
+{
+    const id = window.location.hash.substr(1);
+    
+    if (id == g_constants.NEW_TOPIC)
+        return g_constants.GetTopForumAddress();
+    
+    const arr = id.split('_');
+    if (!arr || !arr.length || arr.length != 2)
+        return g_constants.GetTopForumAddress();
+        
+    return arr[1];
+}
+
+exports.GetDonateAddress = function()
+{
+    const id = window.location.hash.substr(1);
+    
+    if (exports.getItem('donateAddress').status != 'false')
+        return exports.getItem('donateAddress').value;
+
+    return g_constants.donateAddress;
+}
+
 /*exports.convertUTCDateToLocalDate = function (date) {
     var newDate = new Date(date.getTime()-date.getTimezoneOffset()*60*1000);
 

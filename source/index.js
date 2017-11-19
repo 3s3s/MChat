@@ -55,6 +55,12 @@ $(function() {
     SendTransaction(g_Transaction);
   });
   
+  $('#buttonCancel').on('click', (e) => {
+    e.preventDefault();
+    history.back();
+    $('#chat_main').addClass('hidden');
+  });
+  
   $('#buttonGen').on('click', function(event) {
     event.preventDefault();
     
@@ -100,6 +106,8 @@ function CreateOutputs(txt, callback)
   if (parentBoard && parentBoard.status && parentBoard.status == 'success')
     data['pb'] = parentBoard.value;
     
+  data['subject'] = $('#topicNew').val() || "";
+    
   var txtJSON = JSON.stringify(data);
 
   zlib.deflate(txtJSON, (err, buffer) => {
@@ -144,43 +152,51 @@ function CreateTransaction(txt)
       const keyPair = bitcoin.ECPair.fromWIF( wif, g_network );
       address = keyPair.getAddress();
       
-      const g_lastTX = utils.GetLastTX(address);
+     // const g_lastTX = utils.GetLastTX(address);
       
       var tx = new bitcoin.TransactionBuilder( g_network );
       
-      var txIn = g_lastTX.id;
-      var txAmount = g_lastTX.amount;
-      
-      if (!txIn.length && !txAmount)
+      var unspentData = utils.getUnspent(address);
+      if (!unspentData || !unspentData.address)
+        return;
+          
+      if (!unspentData.unspent || !unspentData.unspent.length)
       {
-        var unspentData = utils.getUnspent(address);
-        if (!unspentData || !unspentData.address)
-          return;
-          
-        if (!unspentData.unspent || !unspentData.unspent.length)
-        {
-          $('#balance').addClass('alert-danger')
-          return;
-        }
-          
-        txIn = unspentData.unspent[0].tx;
-        txAmount = unspentData.unspent[0].amount;
+        $('#balance').addClass('alert-danger')
+        return;
       }
-      
-      const amount = parseInt(txAmount/0.00000001)-(outs.length*1000 + 2000);
-      if (amount <= 0)
+        
+      // INPUTS (unspent)
+      var txAmount = 0.0;
+      var countInputs = 0;
+      for (var j=0; j<unspentData.unspent.length; j++)
+      {
+        var txIn = unspentData.unspent[j].tx;
+        tx.addInput(unspentData.unspent[j].tx, unspentData.unspent[j].n);
+          
+        countInputs++;
+          
+        txAmount += unspentData.unspent[j].amount;
+        if (parseInt(txAmount/0.00000001)-(outs.length*1000 + 2000) > 0)
+          break;
+      }
+        
+
+      const change = parseInt(txAmount/0.00000001)-(outs.length*1000 + 2000);
+      if (change <= 0)
       {
         alerts.Alert("Error", 'Insufficient funds');
         return;
       }
+      
       var cost = (outs.length*1000 + 2000);
         
-  
-      tx.addInput(txIn, 0);
-      tx.addOutput(address, amount);
-      tx.addOutput(g_constants.chatAddress, 1000);
-      
-      cost += 1000;
+      // OUTPUTS
+      tx.addOutput(address, change);
+      tx.addOutput(utils.GetTopicAddress(), 1000);
+      tx.addOutput(utils.GetDonateAddress(), 1000);
+
+      cost += 2000;
   
       for (var i=0; i<outs.length; i++)
       {
@@ -188,13 +204,13 @@ function CreateTransaction(txt)
         cost += 1000;
       }
   
-      tx.sign(0, keyPair);
+      // SIGN TRANSACTION
+      for (var i=0; i<countInputs; i++)
+        tx.sign(i, keyPair);
       
       tx = tx.build();
       
-      //utils.setItem(address+'_lastTX', {id : tx.getId(), amount : utils.MakeFloat(amount)});
-      //SendTransaction(tx, address, utils.MakeFloat(amount*0.00000001));
-      g_Transaction =  {tx: tx, address : address, amount : utils.MakeFloat(amount*0.00000001)};
+      g_Transaction =  {tx: tx, address : address, amount : utils.MakeFloat(cost*0.00000001)};
       $('#txInfo').html('Transaction will cost: '+(cost*0.00000001).toFixed(8)+' MC')
     }
     catch(e) {
@@ -221,13 +237,19 @@ function SendTransaction(transaction)
   utils.pushTransaction(tx.toHex(), function(e, data) {
     if (!data || !data.status || data.status != 'success')
     {
+/*      if (!step)
+      {
+        utils.SwapUnconfirmed();
+        SendTransaction(tx, true);
+        return;
+      }*/
       const message = 'Push transaction failed';
       alerts.Alert("Error", (data && data.data) ? message + " " +data.data : message);
       //utils.setItem(address+'_lastTX', {id : '', amount : 0})
       return;
     }
       
-    utils.setItem(address+'_lastTX', {id : data.data, amount : amount});
+    //utils.setItem(address+'_lastTX', {id : data.data, amount : amount});
       
     alerts.Alert("Success!", 'Transaction sended. ID='+data.data);
     $('#messsageNew').val('');
