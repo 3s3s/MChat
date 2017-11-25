@@ -1,6 +1,7 @@
 'use strict';
 const utils = require("../utils");
 const g_constants = require("../constants");
+const chat = require("../chat");
 const g_crypto = require('crypto');
 const bitcoin = require('multicoinjs-lib');
 const g_network = bitcoin.networks[g_constants.network];
@@ -180,6 +181,13 @@ exports.ShowCurrentBranch = function()
     const id = window.location.hash.substr(1);
     if (id == '.' || id == 'en' || id == 'ru')
         return;
+    
+    if (id.indexOf('__0') == id.length-3)
+    {
+        //id = GetTopicAddress();
+        exports.ShowMessages();
+        return;
+    }
         
     const all = utils.getItem(id+'_messages').status == 'false' ? [] : utils.getItem(id+'_messages').value || [];
     
@@ -190,11 +198,16 @@ exports.ShowCurrentBranch = function()
     $('#id_table_'+id+' > thead').append($('<th>Last post</th>'));
 
     $('#bodyChildBoard_'+id+' > tr').remove();
+    
+    var rows = [];
     for (var key in all)
     {
         for (var sub in all[key])
         {
             if (all[key][sub].subject.length < 2)
+                continue;
+                
+            if (all[key][sub].topic != g_constants.GetTopForumAddress())
                 continue;
                 
             var message = all[key][sub].t
@@ -218,11 +231,16 @@ exports.ShowCurrentBranch = function()
                 .append($('<td>'+(new Date(all[key][sub].s)).toLocaleString()+'</td>'));
                 //.append($('<td>'+all[key][sub].from+'</td>'))
                 //.append($('<td>'+message+'</td>'));
-                
-            $('#bodyChildBoard_'+id).append(tr);
+            
+            rows.push({id: id, tr: tr, time: all[key][sub].s*1})    
+            //$('#bodyChildBoard_'+id).append(tr);
         }
     }
     
+    rows.sort((a, b) => {return b.time - a.time});
+    
+    for (var i=0; i<rows.length; i++)
+        $('#bodyChildBoard_'+rows[i].id).append(rows[i].tr);
 }
 
 function CreateSubject(id, key, sub)
@@ -286,33 +304,53 @@ exports.ShowMessages = function(subjectHREF)
     $('#tableMessages > thead').append($('<th>Author</th>'))
     $('#tableMessages > thead').append($('<th>Topic:'+subject+'</th>'));
    
-    //$('#clientCommands').removeClass('hidden');
-    utils.setItem('donateAddress', all[key][sub].from);
-    
     $('#tableMessages > tbody').empty();
-    ShowMessage(all[key][sub], href);
     
+    const topicAddress = GetTopicAddress();
+    setTimeout(chat.Update, 1000, topicAddress);
+    
+    ShowMessage(all[key][sub]);
+    
+    const allMessages = utils.getItem(topicAddress+'_messages').status == 'false' ? [] : utils.getItem(topicAddress+'_messages').value || [];
+
+    var messages = [];
+    for (var key1 in allMessages)
+    {
+        for (var sub1 in allMessages[key1])
+        {
+            messages.push({message: allMessages[key1][sub1], time: allMessages[key1][sub1].s*1});
+            //ShowMessage(allMessages[key1][sub1]);    
+        }
+    }
+    
+    messages.sort((a, b) => {return a.time - b.time;});
+    
+    for (var i=0; i<messages.length; i++)
+        ShowMessage(messages[i].message);
 }
 
-function ShowMessage(message, subjectHREF)
+function GetTopicAddress()
+{
+    const hash = g_crypto.createHash("sha256").update(window.location.hash).digest('base64');
+    const buf = Buffer.from(hash.substr(0, 20));
+    
+    return bitcoin.address.toBase58Check(buf, g_network.pubKeyHash);
+}
+function ShowMessage(message)
 {
     var reply = $('<div></div>');
-    if (subjectHREF)
-    {
-        const hash = g_crypto.createHash("sha256").update(subjectHREF).digest('base64');
-        const buf = Buffer.from(hash.substr(0, 20));
-    
-        const addr = bitcoin.address.toBase58Check(buf, g_network.pubKeyHash)
-        
-        reply = $('<a id="id_reply" href="#Reply_'+addr+'">'+'Reply'+'</a>');
-    }
-    else
-        reply = $('#id_reply') ? $('#id_reply').clone() : $('<div></div>');
+    const topicAddress = GetTopicAddress();
+
+    reply = $('<a id="id_reply" href="#Reply_'+topicAddress+'">'+'Reply'+'</a>');
+
+    const donate = message.donate;
         
     reply.on('click', (e)=>{
             e.preventDefault();
             window.location.hash == e.currentTarget.hash ? {} : history.pushState({}, "", e.currentTarget.hash);
             $('#chat_main').removeClass('hidden');
+            utils.setItem('donateAddress', donate);
+            utils.setItem('parentBoard', topicAddress);
         })
 
     const headMessage = $('<tr></tr>').append($('<td>'+message.subject+'<br><small>'+(new Date(message.s)).toLocaleString()+'</small></td>')).append($('<td align="right"></td>').append(reply));

@@ -12,11 +12,18 @@ const common = require("./childboards/common");
 
 var chatSaved = {};
 
-exports.Update = function()
+var queryAddress = {};
+exports.Update = function(address)
 {
-    GetUnconfirmedTXs((ret1)=>{
+    const addr = address || g_constants.GetTopForumAddress();
+    
+    if (queryAddress[addr] && queryAddress[addr] > Date.now()-30000)
+        return;
+    queryAddress[addr] = Date.now();
+    
+    GetUnconfirmedTXs(addr, ret1 => {
         const unconfirmed = ret1;
-        GetUnspentTXs((ret2)=>{
+        GetUnspentTXs(addr, ret2 => {
             ret2.sort((a,b)=>{return a.confirmations - b.confirmations});
             const txs = unconfirmed.concat(ret2);
             
@@ -24,6 +31,7 @@ exports.Update = function()
             //    UpdateChatTable();
             //});
             setTimeout(SaveTx, 1, txs, 0);
+            delete queryAddress[addr];
         });
     });
     UpdateChatTable();
@@ -107,7 +115,7 @@ function UpdateChatTable()
             const outs = JSON.parse(unescape(chatSaved[key]['data'][0].vout));
             
             //const initKey = key;
-            const message = chatSaved[key];
+            let message = chatSaved[key];
             DecodeOuts(outs, (textJSON) => {
                 if (!textJSON || textJSON.result != 'success')
                     return;
@@ -179,6 +187,8 @@ function DecodeOuts(outs, callback)
         return ret;
         
     ret.data['from'] = outs[0].scriptPubKey.addresses[0];
+    ret.data['topic'] = outs[1].scriptPubKey.addresses[0];
+    ret.data['donate'] = outs[2].scriptPubKey.addresses[0];
     
     var allBuffs = {array: [], length: 0};
     for (var i=3; i<outs.length; i++)
@@ -214,11 +224,11 @@ function DecodeOuts(outs, callback)
     });  
 }
 
-function GetUnconfirmedTXs(callback)
+function GetUnconfirmedTXs(address, callback)
 {
     try
     {
-        const address = g_constants.GetTopForumAddress();
+        //const address = g_constants.GetTopForumAddress();
         
         utils.getJSON(g_constants.API+"address/unconfirmed/"+address, (code, data)=>{
             if (!data || !data.status || data.status.localeCompare('success') != 0)
@@ -238,11 +248,11 @@ function GetUnconfirmedTXs(callback)
     
 }
 
-function GetUnspentTXs(callback)
+function GetUnspentTXs(address, callback)
 {
     try
     {
-        const address = g_constants.GetTopForumAddress();
+        //const address = g_constants.GetTopForumAddress();
         
         utils.getJSON(g_constants.API+"address/unspent/"+address, (code, data)=>{
             if (!data || !data.status || data.status.localeCompare('success') != 0)

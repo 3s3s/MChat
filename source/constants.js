@@ -7,7 +7,7 @@ const g_network = bitcoin.networks[exports.network];
 
 exports.GetTopForumAddress = function()
 {
-    const hash = g_crypto.createHash("sha256").update('NewTopicMChat').digest('base64');
+    const hash = g_crypto.createHash("sha256").update('NewTopicMChat1').digest('base64');
     const buf = Buffer.from(hash.substr(0, 20));
     
     return bitcoin.address.toBase58Check(buf, g_network.pubKeyHash)

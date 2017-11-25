@@ -6,6 +6,7 @@ const common = require("./childboards/common");
 
 exports.Init = function()
 {
+    //localStorage.clear();
     common.InitBoards();
     
 }

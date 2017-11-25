@@ -302,14 +302,14 @@ exports.GetTopicAddress = function()
     return arr[1];
 }
 
-exports.GetDonateAddress = function()
+exports.GetDonateAddress = function(address)
 {
     const id = window.location.hash.substr(1);
     
     if (exports.getItem('donateAddress').status != 'false')
         return exports.getItem('donateAddress').value;
 
-    return g_constants.donateAddress;
+    return address || g_constants.donateAddress;
 }
 
 /*exports.convertUTCDateToLocalDate = function (date) {

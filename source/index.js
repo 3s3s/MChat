@@ -176,13 +176,13 @@ function CreateTransaction(txt)
           
         countInputs++;
           
-        txAmount += unspentData.unspent[j].amount;
+        txAmount += 1.0*unspentData.unspent[j].amount;
         if (parseInt(txAmount/0.00000001)-(outs.length*1000 + 2000) > 0)
           break;
       }
         
 
-      const change = parseInt(txAmount/0.00000001)-(outs.length*1000 + 2000);
+      const change = parseInt(txAmount/0.00000001)-(outs.length*1000 + 2000)-1000;
       if (change <= 0)
       {
         alerts.Alert("Error", 'Insufficient funds');
@@ -194,7 +194,7 @@ function CreateTransaction(txt)
       // OUTPUTS
       tx.addOutput(address, change);
       tx.addOutput(utils.GetTopicAddress(), 1000);
-      tx.addOutput(utils.GetDonateAddress(), 1000);
+      tx.addOutput(utils.GetDonateAddress(address), 1000);
 
       cost += 2000;
   
