@@ -37,7 +37,7 @@ exports.InitBoards = function()
     $('#clientCommands').append(new_topic_button);
     
     exports.ShowTopParentBoard();
-    
+
     $('#bodyEnChildBoards').empty();
     $('#bodyRuChildBoards').empty();
     
@@ -68,6 +68,20 @@ exports.InitBoards = function()
             
         $('#bodyRuChildBoards').append(tr);
     }
+    
+    const board = window.location.hash.substr(1);
+    
+    if (!board.length)  
+        return;
+    exports.ShowBoard();
+    
+    if (board.indexOf('_') == -1)   
+        return;
+    exports.ShowBoardChild();
+    
+    if (board.indexOf('__') == -1)   
+        return;
+    exports.ShowCurrentBranch();
 }
 
 exports.HideAllTables = function()
@@ -132,7 +146,8 @@ exports.ShowBoard = function()
 {
     exports.HideAllTables();
         
-    const id = window.location.hash.substr(1);
+    const board = window.location.hash.substr(1);
+    const id = (board.indexOf('_') != -1) ? board.split('_')[0] : board;
 
     utils.setItem('parentBoard', id);
     $('#parentBoards').removeClass('hidden');
