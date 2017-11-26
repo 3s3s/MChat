@@ -101,12 +101,12 @@ exports.HideAllTables = function()
     $('#tableChildBoards_ru').addClass('hidden');
     $('#tableMessages').addClass('hidden');
     
+    $('#id_table_en_0').addClass('hidden');
     $('#id_table_en_1').addClass('hidden');
     $('#id_table_en_2').addClass('hidden');
-    $('#id_table_en_3').addClass('hidden');
+    $('#id_table_ru_0').addClass('hidden');
     $('#id_table_ru_1').addClass('hidden');
     $('#id_table_ru_2').addClass('hidden');
-    $('#id_table_ru_3').addClass('hidden');
     
     exports.topParentBoard.on('click', (e) => {
         e.preventDefault();

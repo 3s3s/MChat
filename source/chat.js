@@ -27,9 +27,6 @@ exports.Update = function(address)
             ret2.sort((a,b)=>{return a.confirmations - b.confirmations});
             const txs = unconfirmed.concat(ret2);
             
-            //utils.ForEachSync(txs, SaveTx, () => {
-            //    UpdateChatTable();
-            //});
             setTimeout(SaveTx, 1, txs, 0);
             delete queryAddress[addr];
         });
