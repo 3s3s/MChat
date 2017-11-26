@@ -25,7 +25,6 @@ const header_ru = [
     "Разное"
     ];
 
-
 exports.InitBoards = function()
 {
     var new_topic_button = $('<a id="id_new_topic" href="#'+g_constants.NEW_TOPIC+'">New topic</a>').on('click', (e) => {
@@ -34,6 +33,7 @@ exports.InitBoards = function()
         $('#chat_main').removeClass('hidden');
     });
     
+    $('#clientCommands').empty();
     $('#clientCommands').append(new_topic_button);
     
     exports.ShowTopParentBoard();
@@ -225,19 +225,6 @@ exports.ShowCurrentBranch = function()
             if (all[key][sub].topic != g_constants.GetTopForumAddress())
                 continue;
                 
-            var message = all[key][sub].t
-                .replace(/</g, "&lt")
-                .replace(/>/g, "&gt")
-                .replace(/\n/g, "<br>")
-                .replace(/\[b\]/gi, "<b>")
-                .replace(/\[\/b\]/gi, "</b>")
-                .replace(/\[i\]/gi, "<i>")
-                .replace(/\[\/i\]/gi, "</i>")
-                .replace(/\[img/gi, "<img ")
-                .replace(/\[\/img\]/gi, "</img>")
-                .replace(/\]/g, ">")
-                ;
-            
             var subject = CreateSubject(id, key, sub);
             var tr = $('<tr></tr>')
                 .append($('<td></td>'))
@@ -367,11 +354,25 @@ function ShowMessage(message)
             utils.setItem('donateAddress', donate);
             utils.setItem('parentBoard', topicAddress);
         })
+    
+    var text = message.t
+                .replace(/</g, "&lt")
+                .replace(/>/g, "&gt")
+                .replace(/\n/g, "<br>")
+                .replace(/\[b\]/gi, "<b>")
+                .replace(/\[\/b\]/gi, "</b>")
+                .replace(/\[url=(.*)\](.*)\[\/url\]/gi, '<a href="$1" target="_blank">$2</a>')
+                .replace(/\[i\]/gi, "<i>")
+                .replace(/\[\/i\]/gi, "</i>")
+                .replace(/\[img/gi, "<img ")
+                .replace(/\[\/img\]/gi, "</img>")
+                .replace(/\]/g, ">")
+                ;
 
     const headMessage = $('<tr></tr>').append($('<td>'+message.subject+'<br><small>'+(new Date(message.s)).toLocaleString()+'</small></td>')).append($('<td align="right"></td>').append(reply));
     const row = $('<tr></tr>')
         .append($('<td width="15%">'+message.from+'</td>'))
-        .append($('<td></td>').append($('<table width="100%" border="0"></table>').append(headMessage)).append($('<hr style="margin-top: 4px;">')).append($('<div>'+message.t+'</div>')));
+        .append($('<td></td>').append($('<table width="100%" border="0"></table>').append(headMessage)).append($('<hr style="margin-top: 4px;">')).append($('<div>'+text+'</div>')));
         
 
     $('#tableMessages > tbody').append(row);

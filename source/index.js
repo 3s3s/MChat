@@ -10,11 +10,16 @@ const g_constants = require("./constants");
 const zlib = require('zlib');
 const alerts = require("./alerts");
 const forum = require("./forum");
-
+const common = require("./childboards/common");
 
 const g_network = bitcoin.networks[g_constants.network];
 
 var g_Transaction = {tx: "", address : "", amount : 0};
+
+window.addEventListener('popstate', function(e){
+  common.InitBoards(); 
+}, false);
+
 
 $(function() {
   
