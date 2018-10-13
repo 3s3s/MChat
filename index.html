@@ -19,12 +19,69 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
     <script src="js/index.js"></script>
+	
+	<!-- adding tooltips -->
+	<script>
+	$(function () {
+	  $('[data-toggle="tooltip"]').tooltip()
+	})
+	</script>
     
   </head>
   <body>
     <div class="starter-template">
         <h1>Marycoin Chat</h1>
         <p class="lead">The best anonymouse and uncensored chat in the world!</p>
+		<p>Наведите курсор на любой элемент для подсказки</p>
+
+		<!-- modal -->
+		<button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg" data-toggle="tooltip" data-placement="top" title="Нажмите для получения подробной инструкции">Нужна помощь?</button>
+
+		<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+				<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<h2>Справка</h2>
+				<hr>
+					<ol class="text-left">
+						<li>
+							Если у вас его ещё нет, то генерируете приватный ключ - он будет вашим паролем
+						</li>
+						<li>
+							Получаете публичный ключ, он же ваш адрес, он же ваш кошелек
+						</li>
+						<li>
+							Закидываете на адрес немного коинов. Можно воспользоваться краном
+						</li>
+						<li>
+							Пишете текст и нажимаете "Send" (Отправить)
+						</li>
+						<li>
+							Ждёте, пока блокчейн включит ваш текст в блок
+						</li>
+					</ol>
+				<hr>
+				<p>
+					https://3s3s.github.io/MChat/index.html
+					<ul class="text-left">
+						<li>
+							Все сообщения хранятся в блокчейне, а значит не могут быть никем в мире удалены.
+						</li>
+						<li>
+							Каждый создатель темы получает Мэрикоины на свой адрес от тех, кто отвечает в его теме. Чем интересней тема, тем больше можно заработать!
+						</li>
+						<li>
+							Форум польностью децентрализован. Можно скачать его на локальный компьютер https://github.com/3s3s/MChat/archive/gh-pages.zip  Распаковать архив и запустить файл index.html. Никакой интернет-регулятор этот форум никогда не сможет запретить!
+						</li>
+					</ul>
+				</p>
+				<hr>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<a href ="https://bitcointalk.org/index.php?topic=2062667.0" type="button" class="btn btn-info" data-toggle="tooltip" data-placement="top" title="Перейти на форум для обсуждения и дополнительных вопросов">Обсудить!</a>
+				<br><br>
+			</div>
+			</div>
+		</div>
+	
     </div>
 
     <div class='container'>
@@ -36,10 +93,10 @@
               <form id='formRegister' class="form-horizontal" role="form">
                 <div class="form-group row">
                   <div class="col-xs-10"> 
-                    <input type="text" class="form-control" id="privKey" placeholder="Insert (or generate new) Marycoin private key here">
+                    <input type="text" class="form-control" id="privKey" placeholder="Insert (or generate new) Marycoin private key here" data-toggle="tooltip" data-placement="left" title="Поле для приватного ключа от кошелька Marycoin. В целях безопасности, рекомендуется сгенерировать специально для форума (Кнопка справа)">
                   </div>
                   <div class="col-xs-2">
-                    <button id='buttonGen' class="btn btn-primary">Generate</button>
+                    <button id='buttonGen' class="btn btn-primary" data-toggle="tooltip" data-placement="top" title="Сгенерировать приватный ключ">Generate</button>
                   </div> 
                 </div>
                 <!--<div class="form-group row">
@@ -47,6 +104,7 @@
                     <button id='buttonChat' class="btn btn-primary">Join chat!</button>
                   </div>
                 </div>-->
+				
               </form>
               <div id='chat_main' class='hidden'>
                 <br><hr>
@@ -54,19 +112,19 @@
                   <div class="form-group row">
                     <div class="col-xs-2">Your address:</div>
                     <div class="col-xs-8">
-                      <span class="form-control" id="pubKey"></span>
+                      <span class="form-control" id="pubKey" data-toggle="tooltip" data-placement="top" title="Ваш адрес кошелька. Получен благодаря приватному ключу, введёному выше"></span>
                     </div>
                   </div>
                   <div class="form-group row">
                     <div class="col-xs-2">Your balance:</div>
                     <div class="col-xs-6">
-                      <span class="form-control" id="balance">0.0 MC</span>
+                      <span class="form-control" id="balance" data-toggle="tooltip" data-placement="bottom" title="Ваш баланс. Внимание! Обновляется не сразу!">0.0 MC</span>
                     </div>
                     <div class="col-xs-2">
-                      <a class="btn btn-primary" target="_blank" href="https://coinsmarkets.com/trade-BTC-MC.htm">Exchange</a>
+                      <a class="btn btn-primary" target="_blank" href="https://coinsmarkets.com/trade-BTC-MC.htm" data-toggle="tooltip" data-placement="top" title="Купить МС на бирже">Exchange</a>
                     </div>
                     <div class="col-xs-2">
-                      <a class="btn btn-primary" target="_blank" href="https://mc-ex.multicoins.org/faucet.html">Faucet</a>
+                      <a class="btn btn-primary" target="_blank" href="https://mc-ex.multicoins.org/faucet.html" data-toggle="tooltip" data-placement="top" title="Получить немного МС бесплатно через кран (хватит для начала общения)">Faucet</a>
                     </div>
                   </div>
                   
