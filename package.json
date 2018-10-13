@@ -1,0 +1,13 @@
+{
+  "name": "MChat",
+  "version": "0.1.0",
+  "description": "Open Source Cryptocurrency Chat",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/3s3s/MChat.git"
+  },
+  "dependencies": {
+    "jquery": "latest",
+    "multicoinjs-lib": "latest"
+  }
+}
