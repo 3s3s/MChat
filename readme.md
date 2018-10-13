@@ -9,4 +9,6 @@ npm install
 browserify --debug ./source/index.js > ./js/index.js
 ```
 
+Open MChat/index.html in your browser
+
 Enjoy!
